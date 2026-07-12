@@ -171,3 +171,11 @@ bot.launch().then(() => {
     console.error("Botni ishga tushirishda xato:", err);
 });
         
+// Botni Render'da uxlab qolishdan himoya qilish (Har 10 daqiqada o'ziga so'rov yuboradi)
+setInterval(() => {
+    http.get(`http://localhost:${PORT}`, (res) => {
+        console.log("Bot uyg'oq saqlanmoqda...");
+    }).on('error', (e) => {
+        console.error("Ping xatosi:", e.message);
+    });
+}, 600000); // 600,000 millisekund = 10 daqiqa
