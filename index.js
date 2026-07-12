@@ -122,29 +122,36 @@ const elements = [
     { number: 115, symbol: 'Mc', name: 'Moskoviy', mass: 290, period: 7, group: 15 },
     { number: 116, symbol: 'Lv', name: 'Livermoriy', mass: 293, period: 7, group: 16 },
     { number: 117, symbol: 'Ts', name: 'Tennessin', mass: 294, period: 7, group: 17 },
-    { number: 118, symbol: 'Og', name: 'Oganeson', mass: 294 }
+    { number: 118, symbol: 'Og', name: 'Oganeson', mass: 294, period: 7, group: 18 }
 ];
 
 bot.start((ctx) => {
-    ctx.reply(`Salom ${ctx.from.first_name}! Mendeleyev davriy jadvali botiga xush kelibsiz. 😊\n\nIstalgan element belgisini (masalan: H, O, Zn), nomini (masalan: Sink) yoki tartib raqamini yozib yuboring.`);
+    try {
+        ctx.reply(`Salom ${ctx.from.first_name}! Mendeleyev davriy jadvali botiga xush kelibsiz. 😊\n\nIstalgan element belgisini (masalan: H, O, Zn), nomini (masalan: Sink) yoki tartib raqamini yozib yuboring.`);
+    } catch (e) {
+        console.error(e);
+    }
 });
 
 bot.on('text', (ctx) => {
-    const userInput = ctx.message.text.trim().toLowerCase();
-    const foundElement = elements.find(el => 
-        el.symbol.toLowerCase() === userInput || 
-        el.name.toLowerCase() === userInput || 
-        el.number.toString() === userInput
-    );
+    try {
+        const userInput = ctx.message.text.trim().toLowerCase();
+        const foundElement = elements.find(el => 
+            el.symbol.toLowerCase() === userInput || 
+            el.name.toLowerCase() === userInput || 
+            el.number.toString() === userInput
+        );
 
-    if (foundElement) {
-        // Guruh va davr haqida to'liq matn shakllantirish
-        const groupText = foundElement.group ? `• *Joylashuvi:* ${foundElement.group}-guruh, ${foundElement.period}-davr` : `• *Joylashuvi:* ${foundElement.period}-davr (Lantanoid/Aktinoid)`;
-        
-        const response = `🧪 *${foundElement.name} (${foundElement.symbol})*\n\n• *Tartib raqami:* ${foundElement.number}\n• *Atom massasi:* ${foundElement.mass} g/mol\n${groupText}`;
-        ctx.replyWithMarkdown(response);
-    } else {
-        ctx.reply("❌ Kechirasiz, bunday element topilmadi. Qaytadan tekshirib ko'ring (Masalan: Zn, Sink yoki 30).");
+        if (foundElement) {
+            const groupText = foundElement.group ? `• *Joylashuvi:* ${foundElement.group}-guruh, ${foundElement.period}-davr` : `• *Joylashuvi:* ${foundElement.period}-davr (Lantanoid/Aktinoid)`;
+            const response = `🧪 *${foundElement.name} (${foundElement.symbol})*\n\n• *Tartib raqami:* ${foundElement.number}\n• *Atom massasi:* ${foundElement.mass} g/mol\n${groupText}`;
+            ctx.replyWithMarkdown(response);
+        } else {
+            ctx.reply("❌ Kechirasiz, bunday element topilmadi. Qaytadan tekshirib ko'ring (Masalan: Zn, Sink yoki 30).");
+        }
+    } catch (error) {
+        console.error("Xatolik yuz berdi:", error);
+        ctx.reply("⚠️ Ma'lumot qidirishda texnik xatolik yuz berdi.");
     }
 });
 
@@ -160,5 +167,7 @@ server.listen(PORT, () => {
 
 bot.launch().then(() => {
     console.log('Bot muvaffaqiyatli ishga tushdi!');
+}).catch((err) => {
+    console.error("Botni ishga tushirishda xato:", err);
 });
-     
+        
