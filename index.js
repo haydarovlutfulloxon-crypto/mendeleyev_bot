@@ -2,7 +2,7 @@ const { Telegraf } = require('telegraf');
 const http = require('http');
 
 // Tokeningiz joylangan
-const bot = new Telegraf('8825421510:AAGB3kzkZCj6cYb9Rdj9ZG9MQ6J3ui39EEI');
+const bot = new Telegraf(8825421510:AAH8qlRNKgu8iHB7doAVj-WgUEJ5EGS3mGc);
 
 const elements = [
     { number: 1, symbol: 'H', name: 'Vodorod', mass: 1.008, period: 1, group: 1 },
